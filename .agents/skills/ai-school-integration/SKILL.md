@@ -15,13 +15,17 @@ argument-hint: '推进 B37 / 继续上个会话的对接 / 后端 1.0.2 都同�
 
 ## 状态源（先认清哪份文件是权威）
 
-| 文档 | 角色 | 每批是否改 |
+**单一来源原则**：同一件事只在一处描述——**流程与规范**的权威源是本技能（配合 `ai-school/doc/backend-reference.md`），**状态与决策**的权威源是 plan / history，**缺陷与需求**的权威源是 harness v3。互相只写指针、不复述；发现两处说法不一致时以权威源为准，并删掉另一处的复述。
+
+| 文档 | 权威范围 | 每批是否改 |
 | --- | --- | --- |
-| `ai-school/doc/ai-school-integration-plan.md` | 活跃计划：§1 当前状态 / §2 批次计划 / §4 授权四态 / §5 流程 / §6 前端动作台账 | 改 |
-| `ai-school/doc/ai-school-integration-history.md` | 已完成批次明细 + 决策记录 `Dn`（**新增决策也记这里**） | 改 |
-| `后端联调文档/ai-school-integration-issues-v3.md` | 前端→后端缺陷与登记需求台账（**新问题只记这里**，v1 / v2 已冻结） | 需要后端动作时改 |
+| `ai-school/doc/ai-school-integration-plan.md` | 状态与计划：§1 当前状态 / §2 批次范围与口径 / §4 授权四态 / §6 台账（§3 / §5 是指针） | 改 |
+| `ai-school/doc/ai-school-integration-history.md` | 决策与明细：§1 批次明细 / §2 `Dn`（**新增决策也记这里**） | 改 |
+| `后端联调文档/ai-school-integration-issues-v3.md` | 缺陷与登记需求（**新问题只记这里**，v1 / v2 已冻结） | 需要后端动作时改 |
 | `后端联调文档/ai-school-integration-replies-v3.md` | 后端答复 | 只读，出现后同读 |
-| `ai-school/AGENTS.md`、`ai-school/doc/backend-reference.md`、`ai-school/doc/business-domain/README.md` | 红线、后端可读范围与对账顺序、领域规则 | 只读 |
+| **本技能**（含 `references/`） | 流程与规范：推进步骤 / 自审 / 验收 / 参考使用原则 / 后端仓边界；文档写法、对账清单、独立设计、验收口径 | 流程变化时改 |
+| `ai-school/doc/backend-reference.md` | 后端可读范围、对账顺序、版本同步与分支派生 | 口径变化时改 |
+| `ai-school/AGENTS.md`、`doc/business-domain/README.md`、`doc/project-structure.md` | 代码规范红线、领域规则、页面入口 | 只读 |
 
 路径推导：工作区根 `后端联调文档` 即工程化仓 `aiuniv-cloud-harness-engineering/docs/frontend`；其父目录是工程化仓，同级 `aiuniv-cloud-{core,ai,edu,workspace,billing,pay}` 是各服务仓（本机 `D:\10.project\back-end\`，公司机 `D:\06.M\02.Code\backend\`，家用机 `D:\06.source\MProject\back-end\`）。文档写法与收口口径见 [doc-conventions.md](./references/doc-conventions.md)。
 
@@ -31,7 +35,7 @@ argument-hint: '推进 B37 / 继续上个会话的对接 / 后端 1.0.2 都同�
 
 读这几处即可，不要泛读全仓：
 
-1. `plan.md` §1 当前状态、§2 批次计划、§5 流程要点、§6 台账；
+1. `plan.md` §1 当前状态、§2 批次计划、§6 台账（§3 / §5 是指针，不必读）；
 2. `history.md` 中与本批相关的 `Bxx` 小节与 `Dn` 决策（引用到哪个 `Dn` 就读哪个）；
 3. `issues-v3.md`（答复出现后同读 `replies-v3.md`）；
 4. 本批涉及的 `src/service/*.service.ts` 与 `src/types/`。
@@ -70,9 +74,10 @@ argument-hint: '推进 B37 / 继续上个会话的对接 / 后端 1.0.2 都同�
 - 原型只提供功能目标与信息项，视觉细节与编造内容不照做，不合理处先优化再与用户讨论。
 - 共享层（`components/`、`composables/`、`utils/`、`service/protocol/`、`types/`、`layout/`、`styles/`）先提到 web-baseline 再同步；业务组件（如对话面板相关）不强行回提。
 - 页面级改动先看**同页已有区块的信息覆盖与分工**，再决定组件复用与展示开关，不要只从组件角度做决定。
-- 开发与自审要主动对照行业规范与官方最佳实践（Vue 3 / Ant Design Vue / TypeScript / 平台接口惯例）。
 
-### 6. 自审（四件套）
+### 6. 自审（四件套 + 规范核对）
+
+**规范与最佳实践核对（2026-10-11 起）**：开发与自审须主动对照行业规范与官方最佳实践（Vue 3 / Ant Design Vue / TypeScript / 平台接口惯例）；发现冲突先说明问题与替代方案、经确认后再实施。
 
 ```
 npx prettier --check <改动文件>
@@ -89,7 +94,7 @@ npm run stylelint:check
 
 ### 8. 交付产物（每批都主动给，不等用户索要）
 
-1. **验收点击流程**：用户每批都会问「告诉我大概的点击顺序」。给：从哪个菜单进入、点哪里、看到什么算通过、边界项在哪验证。不用太细，覆盖本批改动点即可。常见页面的入口见 [acceptance.md](./references/acceptance.md)。
+1. **验收点击流程**：用户每批都会问「告诉我大概的点击顺序」。给：从哪个菜单进入、点哪里、看到什么算通过、边界项在哪验证。不用太细，覆盖本批改动点即可。页面入口见 `ai-school/doc/project-structure.md`，验证方法与刷新鲜口径见 [acceptance.md](./references/acceptance.md)。
 2. **独立性自查结论**（每批）：按 [independent-design.md](./references/independent-design.md) 的禁止信号过一遍，命中项先自行修正再交付；并在汇报里明确说「本批无照搬信号」或列出处理了什么。
 3. **参考对照表**（本批参考过 `bt/*` 前端实现或原型时必给）：逐项列「参考做法 / 本仓实现 / 差异与理由」，模板见 [reference-matrix.md](./assets/reference-matrix.md)——这是用户核对有没有照搬的唯一抓手，缺了视为交付不完整。
 
@@ -123,7 +128,7 @@ npm run stylelint:check
 | 「还有可以做的任务吗 / 都同步完了吗」 | 读 plan §2 待开始 + 挂起 + §6 台账，再对后端各 `origin/1.0.x` 做一次差异扫描，给候选清单（按可推进度排序），不要擅自开工 |
 | 「后端在 bt/1.0.1、1.0.2 新增的功能同步完了吗」 | 按 backend-recon 做全量对账，逐条给「已同步 / 待同步 / 不吸收」结论与证据 |
 | 「这批是不是独立设计的 / 有没有照搬参考」 | 出参考对照表 + 禁止信号自查结论（逐条对，不要只说「没有照搬」） |
-| 「给我验收点击流程」 | 按本批改动给点击路径（含边界项），入口参考 acceptance.md |
+| 「给我验收点击流程」 | 按本批改动给点击路径（含边界项），入口参考 `ai-school/doc/project-structure.md`、方法参考 acceptance.md |
 | 「把这个写进文档」 | 按 doc-conventions 落到 plan §2 / history `Dn` / issues-v3 对应位置 |
 | 「开个新会话继续」 | 用 handoff.md 模板产出接续稿 |
 | 「文档太啰嗦了 / 精简一下」 | 按 doc-conventions 的「精简口径」收口，删重复与过程性描述，保留口径与编号 |
