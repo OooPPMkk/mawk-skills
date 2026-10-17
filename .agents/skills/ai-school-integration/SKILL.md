@@ -101,7 +101,7 @@ npm run stylelint:check
 ### 9. 收尾回写与交接
 
 - plan §1 更新当前状态（提交 SHA 填在用户提交后）、§2 把批次移入「已完成」、§6 台账删掉已闭环项；
-- history §1 追加批次明细（范围 / 口径 / 实现 / 验收 / 验证边界 / 依赖），新增 `Dn`；
+- history §1 追加批次明细（范围 / 口径 / 实现 / 验收 / 验证边界 / 依赖），新增 `Dn`；§1 / §2 各只保留最近 10 条正文，超出者移入节首「已归档索引」表（列与口径见 doc-conventions）；
 - issues-v3 中已闭环项**移除**（首版收口口径），同步 frontmatter 的 `open_issue_count` / 缺陷集列表；
 - **不代为 `git add` / `commit` / `push`**：改动留在工作区，提示用户自行提交；用户提交后按需要补 SHA。
 - 会话过长时主动给「新会话接续稿」，模板见 [handoff.md](./assets/handoff.md)。
