@@ -21,7 +21,8 @@
 ## 分支口径
 
 - **1.0.1 已冻结，新契约一律进 `origin/1.0.2`**（`origin/master` 也可能带新端点，两边都看）。
-- 本地 checkout 常是旧快照，**先 `git fetch` 再读 `origin/<branch>`**；不要拿旧版本实现下结论。
+- **每次对账先跑 [backend-sync.ps1](../scripts/backend-sync.ps1)**：`git fetch --prune` + 主工作树 `switch --detach` 到最新 `1.0.x`（dirty 则跳过该仓）；确认到手再下结论，不要拿旧版本实现说事。本机六个服务仓当前已在 `1.0.2`。
+- 需要与旧版本对照（`1.0.1` ↔ `1.0.2`）时用 `git worktree` 派生旧分支（约定路径与清理见 `ai-school/doc/backend-reference.md`）。
 - `bt/*` 分支是后端做的模拟对接提交，**只读参考**：理解契约与设计思路用，不合并、不搬运、不照抄其中的前端实现（读法与时机见 [independent-design.md](./independent-design.md)）。
 - 对接接口基址 `https://dev-api-gaoke.hobo.top`，契约分段 `/admin-api/{service}/v3/api-docs`（system / edu / workspace / ai / billing / infra）。
 
@@ -44,7 +45,7 @@
 
 | | |
 | --- | --- |
-| **时机** | 放到本仓实现完成、自审之前再读（先自研后对照），不要在步骤 2 顺手把它读成实现蓝图 |
+| **时机** | 对账阶段即可读，用于看懂设计思路与联调口径；读的是「思路」不是「写法」，落笔一律按本仓规范 |
 | **读什么** | 接口调用时机与参数语义、字段消费顺序、边界与失败处理口径、页面要达成的交互意图 |
 | **不读成依据** | 命名、组件拆分、状态管理方式、样式数值与配色、文案措辞、mock 与调试代码、注释 |
 
@@ -73,8 +74,18 @@
 
 结论必须能回答「**是不是都同步完了**」：逐条给「已同步 / 待同步（进哪个批次）/ 不吸收（理由）」，不留模糊项。
 
+## 定位与读取的分工
+
+后端仓在工作区之外，`grep_search` / `file_search` 不覆盖，所以对账要分两步：
+
+1. **定位（主会话）**：主工作树已同步到最新版，`git -C <仓> grep -n <pattern>` 一次拿到命中文件与行号（输出很小，不会弄脏上下文）；对照旧版本时对派生树路径做同样的事。
+2. **读取（subagent）**：按定位结果给的文件清单读绝对路径并归纳，**不要再自己逐层 `list_dir` 摸目录**（maven 多模块近 10 层，纯浪费）。
+
+并发分片按「服务」切、**上限 3**，单服务批次用 1 个；每份报告必须带 `rev-parse --short HEAD` 的 SHA。
+
 ## 只读边界
 
-- 后端仓不写入、不提交、不切分支；需要最新契约时只 `git fetch`。
-- 后端仓在工作区之外，读取用绝对路径。
+- 后端仓不改代码、不提交、不建分支；允许 `git fetch` + 主工作树升到最新 `1.0.x`（脚本见上）+ `git worktree` 派生旧版本对照（约定路径 `\_recon\<仓名>@<分支>`，用完 `worktree remove`）。
+- **harness 仓的 `docs/frontend` 就是本工作区的一个根**：不建 worktree、不切分支，按当前工作区读取。
+- 后端仓在工作区之外：`read_file` / `list_dir` 可用（绝对路径），`grep_search` / `file_search` 不可用。
 - harness 仓只有 `docs/frontend/ai-school-integration-issues-*.md` 与 `replies-*.md` 归前端 owner；`ai-school-api-guide.md`、`playwright-tests/**` 等默认不改，要动先问用户。

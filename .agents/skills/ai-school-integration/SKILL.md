@@ -1,6 +1,6 @@
 ---
 name: ai-school-integration
-description: '推进 ai-school（中国高科 AI 教育产品平台）真实后端对接的批次工作：载入计划与历史上下文 → 后端源码级对账 → 列决策点待用户拍板 → 先更新文档再实施 → 四件套自审 → 真机验收并给点击流程 → 收尾回写与开新会话交接。坚持独立设计：bt 分支前端实现与原型只作参考（理解目标与契约），先自研后对照，交付附参考对照表。USE FOR: 推进 Bxx 批次、继续上个会话的对接、后端 bt/1.0.x 新增功能是否同步完、新会话接续对接任务、更新 ai-school-integration-plan / history、登记 harness v3 issue / replies、给本批改动的验收点击流程、核对本批是否独立设计（有没有照搬参考）。DO NOT USE FOR: 与后端对接无关的纯界面设计打磨、web-baseline 基线改动、后端仓代码修改、harness 仓 issues / replies 以外的文档。'
+description: '推进 ai-school（中国高科 AI 教育产品平台）真实后端对接的批次工作：载入计划与历史上下文 → 后端源码级对账 → 列决策点待用户拍板 → 先更新文档再实施 → 四件套自审 → 真机验收并给点击流程 → 收尾回写与开新会话交接。坚持独立设计：bt 分支前端实现与原型只作参考（重点理解其设计思路与实现方式），再结合本仓现状与规范改进，交付附参考对照表。USE FOR: 推进 Bxx 批次、继续上个会话的对接、后端 bt/1.0.x 新增功能是否同步完、新会话接续对接任务、更新 ai-school-integration-plan / history、登记 harness v3 issue / replies、给本批改动的验收点击流程、核对本批是否独立设计（有没有照搬参考）。DO NOT USE FOR: 与后端对接无关的纯界面设计打磨、web-baseline 基线改动、后端仓代码修改、harness 仓 issues / replies 以外的文档。'
 argument-hint: '推进 B37 / 继续上个会话的对接 / 后端 1.0.2 都同步完了吗'
 ---
 
@@ -42,9 +42,9 @@ argument-hint: '推进 B37 / 继续上个会话的对接 / 后端 1.0.2 都同�
 
 **任何契约判断都要落到源码证据，不允许只凭 OpenAPI、api-guide 或印象下结论。** 清单、仓库职责、分支口径与报告格式见 [backend-recon.md](./references/backend-recon.md)。
 
-要点：先 `git fetch` 每个后端仓，读 `origin/1.0.x`（**1.0.1 已冻结，新契约进 1.0.2**）与 `origin/master`，必要时看 `bt/*`（只读参考，不合并不搬运）；对照 Controller / DTO / 枚举 / 错误码 / SQL 迁移；能上 dev 实测的补实测。
+要点：先跑 [backend-sync.ps1](./scripts/backend-sync.ps1)（`git fetch --prune` + 把六个服务仓主工作树检出到最新 `1.0.x`，dirty 的仓跳过）——**1.0.1 已冻结，新契约进 1.0.2**；需要与旧版本对照、或要看 `bt/*`（只读参考，不合并不搬运）时再用 `git worktree` 派生（约定路径见 `ai-school/doc/backend-reference.md`）；对照 Controller / DTO / 枚举 / 错误码 / SQL 迁移；能上 dev 实测的补实测。
 
-**契约只从后端 Java 源码 / SQL / dev 实测取；`bt/*` 里的前端实现只用来理解意图与联调口径，读法与时机见 [independent-design.md](./references/independent-design.md)（不要在这步顺手把它的实现读成蓝图）。**
+**契约只从后端 Java 源码 / SQL / dev 实测取；`bt/*` 里的前端实现只用来理解设计思路与联调口径，读法见 [independent-design.md](./references/independent-design.md)（取思路，不取命名 / 组件结构 / 样式值 / 文案这些写法）。**
 
 产出必须是**「差异 → 影响面 → 建议批次划分」**，而不是只处理眼前这一批——用户明确要求先想清楚后续几批再动手。
 
@@ -64,7 +64,7 @@ argument-hint: '推进 B37 / 继续上个会话的对接 / 后端 1.0.2 都同�
 
 后端在 `bt/*` 上的前端改动为的是联调接口，不以前端规范与 UI 质量为目标，**命名 / 组件拆分 / 状态管理 / 样式数值 / 文案措辞 / 工程结构都不具备参考价值**。完整口径、禁止信号与自问清单见 [independent-design.md](./references/independent-design.md)。
 
-- **顺序铁律：先自研，后对照。** 先从后端源码 / dev 实测确认契约，按 plan §2 口径与本仓规范独立实现；**实现完成、自审之前**才读 `bt/*` 的前端实现做交叉核对（找漏掉的边界与失败处理），核对结果写进参考对照表。反过来做会不可逆地锚定实现方式。
+- **顺序：先理解参考，再结合本仓改进。** 先读 `bt/*` 前端实现与原型，看懂它的设计思路、字段消费方式与边界处理（取「思路」不取「写法」），再结合本仓现状与 `AGENTS.md` 规范重写；契约仍以后端 Java 源码 / SQL / dev 实测为准，参考是实现、不是契约。
 - 命名、组件拆分、状态管理、样式与文案一律按本仓 `AGENTS.md` 与既有同类页面决定；样式值只来自 Ant Token / `--palette-*` / `rem` 规范，不取参考里的色值与间距。
 - 冲突处理顺序：**本仓 `AGENTS.md` 规范 > 需求与原型的设计目标 > 后端 `bt/*` 实现**；出现冲突先说明问题与替代方案，经确认再实施。
 - 原型只提供功能目标与信息项，视觉细节与编造内容不照做，不合理处先优化再与用户讨论。
@@ -103,7 +103,7 @@ npm run stylelint:check
 
 ## 红线清单（每步自查）
 
-- 后端仓只读：不改、不提交、不切分支。
+- 后端仓只读：不改代码、不提交、不建分支；每次对账先跑 `scripts/backend-sync.ps1` 把主工作树升到最新 `1.0.x`（dirty 的仓跳过并报告），对照旧版本才用 `git worktree` 派生；harness 仓不做任何检出 / 派生。
 - harness 仓只有 `issues` / `replies` 可改（前端 owner），其余文档要动先问。
 - 不代 `git add` / `commit` / `push`，不建分支，不动用户正在编辑的文件。
 - 文档只记**高价值信息**：范围、口径、验收结论、依赖、验证边界；不入 diff 级实现细节（实现要看直接读源码）。
