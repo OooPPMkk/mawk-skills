@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "oil-ui": {
+      "source": "oil-oil/oil-ui",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "cb27ee1758e750e7acfdb886a6d7ab06f9c5c1e5352aa7e4d0a8fa5803c3e898"
+    }
+  }
+}

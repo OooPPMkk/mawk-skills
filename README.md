@@ -7,7 +7,9 @@
 ```
 .agents/skills/<技能名>/
 ├── SKILL.md          # 技能说明（VS Code Copilot 按需加载）
-└── scripts/          # 技能捆绑的脚本（可选）
+└── scripts/          # 技能捆绑的脚本与资源（可选）
+
+skills-lock.json      # 记录第三方技能的安装来源与内容哈希
 ```
 
 ## 技能清单
@@ -15,6 +17,7 @@
 | 技能 | 用途 |
 | --- | --- |
 | memory-sync | 导入、导出、合并 GitHub Copilot 记忆（家用机 ⇄ 公司机迁移与同步） |
+| oil-ui | 界面设计（第三方，源自 oil-oil/oil-ui）：设计方向探索、多风格同屏比较、截图还原与界面评审 |
 
 ## 使用流程
 
@@ -77,4 +80,5 @@ powershell -ExecutionPolicy Bypass -File "<本仓库路径>\.agents\skills\memor
 - 迭代：直接改 `.agents/skills/memory-sync/` 下的文件，git 提交后所有加载了本仓库的工作区立即生效（无需重装）。
 - 双机同步：本仓库走 git，两台机器分别 pull / push。
 - 新增技能：在 `.agents/skills/` 下新建 `<技能名>/SKILL.md`（frontmatter 需 `name` 与 `description`，触发词写进描述），提交推送即可。
+- 第三方技能（oil-ui）：整目录入库、不手改内部文件；有新版本时在对话里让 AI 更新（技能自带 `scripts/check_update.py --update`），更新后提交推送。
 - 约定：`.ps1` 脚本保存为 UTF-8 with BOM（PowerShell 5.1 读中文源码的要求）；脚本的执行提示用英文、生成物（导出包 README）用中文。
