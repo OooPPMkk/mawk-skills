@@ -11,7 +11,7 @@ argument-hint: '推进 B37 / 继续上个会话的对接 / 后端 1.0.2 都同�
 ## 适用边界
 
 - 用于：ai-school 仓与真实后端（`aiuniv-cloud-*` 五服务 + 工程化仓）对接的批次推进、文档维护、后端差异核对。
-- 不用于：纯界面设计判断（界面设计走 oil-ui 技能）、web-baseline 基线模板改动、后端仓任何写入、harness 仓 issues / replies 之外的文档改动。
+- 不用于：纯界面设计判断（界面设计走 `impeccable` / `frontend-design` 技能）、web-baseline 基线模板改动、后端仓任何写入、harness 仓 issues / replies 之外的文档改动。
 
 ## 状态源（先认清哪份文件是权威）
 

@@ -18,7 +18,8 @@ skills-lock.json      # 记录第三方技能的安装来源与内容哈希
 | --- | --- |
 | memory-sync | 导入、导出、合并 GitHub Copilot 记忆（家用机 ⇄ 公司机迁移与同步） |
 | ai-school-integration | ai-school 后端对接批次推进：载入计划与历史 → 后端源码级对账 → 拍板 → 文档先行 → 实施 → 四件套自审 → 真机验收 → 收尾回写与交接 |
-| oil-ui | 界面设计（第三方，源自 oil-oil/oil-ui）：设计方向探索、多风格同屏比较、截图还原与界面评审 |
+| impeccable | 界面设计与精修（第三方，源自 pbakaus/impeccable）：方向塑造、UX 评审、层级 / 排版 / 色彩 / 动效打磨、无障碍与响应式加固、DESIGN.md 设计系统沉淀 |
+| frontend-design | 有辨识度的视觉设计（第三方，源自 anthropics/skills）：新界面或改版时的美学方向、排版与去模板化决策 |
 
 ## 使用流程
 
@@ -81,5 +82,5 @@ powershell -ExecutionPolicy Bypass -File "<本仓库路径>\.agents\skills\memor
 - 迭代：直接改 `.agents/skills/memory-sync/` 下的文件，git 提交后所有加载了本仓库的工作区立即生效（无需重装）。
 - 双机同步：本仓库走 git，两台机器分别 pull / push。
 - 新增技能：在 `.agents/skills/` 下新建 `<技能名>/SKILL.md`（frontmatter 需 `name` 与 `description`，触发词写进描述），提交推送即可。
-- 第三方技能（oil-ui）：整目录入库、不手改内部文件；有新版本时在对话里让 AI 更新（技能自带 `scripts/check_update.py --update`），更新后提交推送。
+- 第三方技能（当前为 `impeccable`、`frontend-design`）：整目录入库、不手改内部文件，来源与内容哈希由 `skills-lock.json` 记录。用 `npx skills add <owner/repo> --skill <技能名>` 安装、`npx skills list` 查看、`npx skills update` 升级、`npx skills remove <技能名>` 卸载；装完把 `README.md` 的技能清单补上，并提交推送。
 - 约定：`.ps1` 脚本保存为 UTF-8 with BOM（PowerShell 5.1 读中文源码的要求）；脚本的执行提示用英文、生成物（导出包 README）用中文。

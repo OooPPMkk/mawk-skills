@@ -1,11 +1,17 @@
 {
   "version": 1,
   "skills": {
-    "oil-ui": {
-      "source": "oil-oil/oil-ui",
+    "frontend-design": {
+      "source": "anthropics/skills",
       "sourceType": "github",
-      "skillPath": "SKILL.md",
-      "computedHash": "cb27ee1758e750e7acfdb886a6d7ab06f9c5c1e5352aa7e4d0a8fa5803c3e898"
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "89496d5dd00f4810205f351759594fc2742bf8eea85a2f2b2d1de59f4bd91576"
+    },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "2b16bd26632e294094da7e6d2352dce4c1efec66d3b90c88f0e059b28e2d6e04"
     }
   }
 }
