@@ -22,6 +22,14 @@ npm --prefix <ai-school 绝对路径> run stylelint:check
 - 常用身份：`chenqi`（默认）、`linxia`、`zhounan`，密码 `Aiuniv2026`。
 - Node 版本按仓内 `.nvmrc`（22.23.1）。
 
+## 契约复验（后端答复的 rerun_criteria）
+
+- 手法：写一个**一次性 node 脚本**（Node 自带 `fetch`）登录取 token 后逐批打端点断言，同时把完整结果写 JSON 文件再读文件核对（终端中文易乱码，JSON 更可靠）；脚本放系统临时目录（如 `%TEMP%`）、**不落仓**，需要留档时提示用户自行保存。
+- 断言口径（实测踩坑）：平台把 Long 序列化成**字符串**（`total`、雪花 id、点数都是 `"3"` / `"7076"`）；断言与比较一律先 `Number()` / `BigInt()`，别写 `typeof total === 'number'`，否则整批假失败。
+- 只读优先：会改数据的探针（讲次解锁消耗课时券、改密撤销令牌、创建订购单）**先跳过并写进验证边界**，需要跑先问用户。
+- 更能说明问题的判据：能拿全量基线就对比全量（如游标翻页结果与 `pageNo` 升序全量遍历逐条一致），比只看单页形状有力。
+- 落点：复验结论写 history `Dn`（日期 + 身份 + 端点 + 关键实测值 + 验证边界）与 plan §1 一行；**不写进 v3**。有产品影响的差异才过「缺陷登记闸门」→ **先与用户确认**，同意后才登记缺陷或写入 v3 `NOT_REPORTED_ON_PURPOSE` 留档。
+
 ## 浏览器验证
 
 - 优先用 Chrome DevTools MCP / 隔离 Chrome（`--remote-debugging-port=9222` + 独立 `--user-data-dir`）；VS Code 内置预览页的尺寸与截图不可信（viewport 被宿主改回、截图是旧合成帧），布局判定一律用 `evaluate` 读几何。
@@ -32,7 +40,7 @@ npm --prefix <ai-school 绝对路径> run stylelint:check
 
 ## 验收结论要写进 history
 
-每条批次明细的「验收」段至少给出：测试身份与环境、走的端点与关键字段实测值、页面可见结果、边界项如何验证（真实数据不具备时的构造方式，如页面内 XHR 拦截）。
+每条批次明细的「验收」段至少给出：测试身份与环境、走的端点与关键字段实测值、页面可见结果、边界项如何验证（真实数据不具备时的构造方式，如页面内 XHR 拦截）。验收与复验结论的落点是 history / plan §1，**不进 v3**（v3 只收「要后端做什么」，见 [doc-conventions.md](./doc-conventions.md) 的「缺陷登记闸门」）。
 
 ## 常见页面入口
 
