@@ -9,6 +9,7 @@
 ├── SKILL.md          # 技能说明（VS Code Copilot 按需加载）
 └── scripts/          # 技能捆绑的脚本与资源（可选）
 
+AGENTS.md             # 记忆→技能路由规则（保存记忆前先过这道闸）
 skills-lock.json      # 记录第三方技能的安装来源与内容哈希
 ```
 
@@ -18,6 +19,8 @@ skills-lock.json      # 记录第三方技能的安装来源与内容哈希
 | --- | --- |
 | memory-sync | 导入、导出、合并 GitHub Copilot 记忆（家用机 ⇄ 公司机迁移与同步） |
 | ai-school-integration | ai-school 后端对接批次推进：载入计划与历史 → 后端源码级对账 → 拍板 → 文档先行 → 实施 → 四件套自审 → 真机验收 → 收尾回写与交接 |
+| browser-verification | 前端真机浏览器验证与 CDP 调试：几何读数优先（不靠截图）、隔离 Chrome 会话、探针脚本（视口几何 / 真窗截图 / 像素采样）、Vite dev 缓存陈旧诊断 |
+| windows-toolchain-pitfalls | Windows 工具链高频坑与修法：PowerShell 5.1 编码与命令改写、编辑工具落盘核对、Git CRLF 伪修改与输出编码、Prettier range 格式化 bug |
 | impeccable | 界面设计与精修（第三方，源自 pbakaus/impeccable）：方向塑造、UX 评审、层级 / 排版 / 色彩 / 动效打磨、无障碍与响应式加固、DESIGN.md 设计系统沉淀 |
 | frontend-design | 有辨识度的视觉设计（第三方，源自 anthropics/skills）：新界面或改版时的美学方向、排版与去模板化决策 |
 
@@ -38,7 +41,7 @@ skills-lock.json      # 记录第三方技能的安装来源与内容哈希
 
 2. 重载窗口（Reload Window）后生效。
 3. 验证：在 Copilot Chat 输入 `/`，技能列表中应出现 `memory-sync`。
-4. 说明：VS Code 的用户级目录不支持技能（用户级只有提示、指令、智能体三类），所以技能跟随本仓库、由各工作区加载；本仓库没有 AGENTS.md，作为根只贡献技能清单，token 负担很小。
+4. 说明：VS Code 的用户级目录不支持技能（用户级只有提示、指令、智能体三类），所以技能跟随本仓库、由各工作区加载；根 `AGENTS.md` 只含「记忆→技能路由规则」，token 负担很小。
 
 ### 二、导出记忆（源机）
 
